@@ -1,0 +1,43 @@
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+double F(double x1, double x2) {
+    return x1*x1 + 3*x2*x2 + cos(x1 + x2);
+}
+
+double minimize(double x1, double x2, double alpha, double epsilon) {
+    double prev_loss = F(x1, x2);
+    double curr_loss = prev_loss;
+    
+    while (true) {
+        double x1_new = x1 - alpha * (2*x1 - sin(x1 + x2));
+        double x2_new = x2 - alpha * (6*x2 - sin(x1 + x2));
+        
+        curr_loss = F(x1_new, x2_new);
+
+        if (prev_loss - curr_loss < epsilon) {
+            break;
+        }
+
+        x1 = x1_new;
+        x2 = x2_new;
+        prev_loss = curr_loss;
+    }
+    
+    return curr_loss;
+}
+
+int main() {
+    double x1 = 1.0;
+    double x2 = 1.0;
+    double alpha = 0.01;
+    double epsilon = 0.0001;
+
+    double result = minimize(x1, x2, alpha, epsilon);
+
+    cout << "Minimum value of F(x) = " << result << endl;
+
+    return 0;
+}
